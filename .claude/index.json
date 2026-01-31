@@ -1,0 +1,249 @@
+{
+  "metadata": {
+    "project_name": "agent-browser-claude-plugin",
+    "description": "Fast headless browser automation plugin for Claude Code - Built with Rust CLI and Node.js daemon on Playwright",
+    "version": "1.0.0",
+    "repository": "https://github.com/ZenoWangzy/agent-browser-claude-plugin",
+    "scan_timestamp": "2026-01-31T23:33:55Z",
+    "scan_phase": "completed"
+  },
+  "coverage": {
+    "total_files": 50,
+    "scanned_files": 40,
+    "coverage_percent": 80,
+    "ignored_files": 10,
+    "ignored_patterns": [
+      ".git/**",
+      ".gitignore",
+      "*.png",
+      "*.jpg",
+      "*.jpeg",
+      "*.pdf",
+      "*.log",
+      "*.lock",
+      "node_modules/**"
+    ]
+  },
+  "modules": [
+    {
+      "name": "agents",
+      "path": "agents/",
+      "type": "agent-definitions",
+      "description": "AI 子代理定义",
+      "files": [
+        {
+          "path": "agents/browser-automation.md",
+          "description": "浏览器自动化专家代理",
+          "model": "sonnet",
+          "tools": ["Bash", "Read", "Write", "Edit"]
+        }
+      ],
+      "coverage": "complete"
+    },
+    {
+      "name": "commands",
+      "path": "commands/",
+      "type": "slash-commands",
+      "description": "斜杠命令定义",
+      "files": [
+        {
+          "path": "commands/browse.md",
+          "description": "网页导航与交互命令"
+        },
+        {
+          "path": "commands/screenshot.md",
+          "description": "截图捕获命令"
+        },
+        {
+          "path": "commands/scrape.md",
+          "description": "数据爬取命令"
+        },
+        {
+          "path": "commands/fill-form.md",
+          "description": "表单自动填充命令"
+        }
+      ],
+      "coverage": "complete"
+    },
+    {
+      "name": "skills",
+      "path": "skills/",
+      "type": "workflow-skills",
+      "description": "工作流技能定义",
+      "submodules": [
+        {
+          "name": "web-scraping",
+          "path": "skills/web-scraping/",
+          "description": "网页爬取工作流和最佳实践",
+          "files": ["SKILL.md"],
+          "coverage": "complete"
+        },
+        {
+          "name": "form-automation",
+          "path": "skills/form-automation/",
+          "description": "表单自动填充和提交流程",
+          "files": ["SKILL.md"],
+          "coverage": "complete"
+        },
+        {
+          "name": "screenshot-capture",
+          "path": "skills/screenshot-capture/",
+          "description": "截图和视觉捕获工作流",
+          "files": ["SKILL.md"],
+          "coverage": "complete"
+        },
+        {
+          "name": "e2e-testing",
+          "path": "skills/e2e-testing/",
+          "description": "端到端测试工作流",
+          "files": ["SKILL.md"],
+          "coverage": "complete"
+        }
+      ],
+      "coverage": "complete"
+    },
+    {
+      "name": "contexts",
+      "path": "contexts/",
+      "type": "context-prompts",
+      "description": "系统上下文提示",
+      "files": [
+        {
+          "path": "contexts/browser-mode.md",
+          "description": "浏览器自动化模式上下文"
+        }
+      ],
+      "coverage": "complete"
+    },
+    {
+      "name": "rules",
+      "path": "rules/",
+      "type": "automation-rules",
+      "description": "自动化规则和最佳实践",
+      "files": [
+        {
+          "path": "rules/browser-automation.md",
+          "description": "浏览器自动化最佳实践规则"
+        }
+      ],
+      "coverage": "complete"
+    },
+    {
+      "name": "hooks",
+      "path": "hooks/",
+      "type": "hook-configuration",
+      "description": "前置/后置钩子配置",
+      "files": [
+        {
+          "path": "hooks/hooks.json",
+          "description": "PreToolUse 和 PostToolUse 钩子定义"
+        }
+      ],
+      "coverage": "complete"
+    },
+    {
+      "name": "examples",
+      "path": "examples/",
+      "type": "usage-examples",
+      "description": "使用示例",
+      "files": [
+        {
+          "path": "examples/CLAUDE.md",
+          "description": "项目级示例"
+        },
+        {
+          "path": "examples/user-CLAUDE.md",
+          "description": "用户级示例"
+        }
+      ],
+      "coverage": "complete"
+    },
+    {
+      "name": "claude-plugin",
+      "path": ".claude-plugin/",
+      "type": "plugin-manifest",
+      "description": "插件清单配置",
+      "files": [
+        {
+          "path": ".claude-plugin/plugin.json",
+          "description": "插件组件配置"
+        },
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "description": "市场目录配置"
+        }
+      ],
+      "coverage": "complete"
+    }
+  ],
+  "gaps": [],
+  "truncated": false,
+  "next_steps": [
+    "项目扫描已完成",
+    "这是一个文档/配置驱动的插件项目",
+    "所有核心模块均已扫描完成",
+    "无需进一步深度扫描"
+  ],
+  "file_tree": {
+    "agents": [
+      "browser-automation.md"
+    ],
+    "commands": [
+      "browse.md",
+      "fill-form.md",
+      "scrape.md",
+      "screenshot.md"
+    ],
+    "contexts": [
+      "browser-mode.md"
+    ],
+    "examples": [
+      "CLAUDE.md",
+      "user-CLAUDE.md"
+    ],
+    "hooks": [
+      "hooks.json"
+    ],
+    "rules": [
+      "browser-automation.md"
+    ],
+    "skills": {
+      "e2e-testing": [
+        "SKILL.md"
+      ],
+      "form-automation": [
+        "SKILL.md"
+      ],
+      "screenshot-capture": [
+        "SKILL.md"
+      ],
+      "web-scraping": [
+        "SKILL.md"
+      ]
+    },
+    ".claude-plugin": [
+      "marketplace.json",
+      "plugin.json"
+    ],
+    "root": [
+      "CLAUDE.md",
+      "CONTRIBUTING.md",
+      "LICENSE",
+      "README.md",
+      "README.zh-CN.md",
+      "package.json",
+      ".gitignore"
+    ]
+  },
+  "keywords": [
+    "browser",
+    "automation",
+    "claude-code",
+    "playwright",
+    "scraping",
+    "e2e",
+    "testing",
+    "rust",
+    "headless"
+  ]
+}
