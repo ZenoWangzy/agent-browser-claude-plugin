@@ -1,0 +1,40 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Claude Code
+.claude/local/
+.claude/cache/
+.claude/session-history/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Editor
+.vscode/
+.idea/
+*.iml
+
+# Build
+dist/
+build/
+*.log
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Screenshots (example)
+screenshots/
+*.png
+*.jpg
+*.pdf

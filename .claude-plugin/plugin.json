@@ -1,0 +1,42 @@
+{
+  "name": "agent-browser",
+  "version": "1.0.0",
+  "description": "Fast headless browser automation for Claude Code - Rust CLI with Node.js daemon built on Playwright",
+  "author": "ZenoWangzy <zenowangzy@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZenoWangzy/agent-browser-claude-plugin"
+  },
+  "components": {
+    "agents": ["agents/browser-automation.md"],
+    "skills": [
+      "skills/web-scraping",
+      "skills/form-automation",
+      "skills/screenshot-capture",
+      "skills/e2e-testing"
+    ],
+    "commands": [
+      "commands/browse.md",
+      "commands/screenshot.md",
+      "commands/scrape.md",
+      "commands/fill-form.md"
+    ],
+    "contexts": [
+      "contexts/browser-mode.md"
+    ]
+  },
+  "keywords": [
+    "browser",
+    "automation",
+    "playwright",
+    "scraping",
+    "e2e",
+    "testing",
+    "rust",
+    "headless"
+  ],
+  "claude": {
+    "minVersion": "2.1.0"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "tool == \"Bash\" && tool_input.command matches \"^agent-browser\"",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "About to execute agent-browser command. Ensure:\n1. Browser is running (check with 'agent-browser status')\n2. Selectors are stable and semantic\n3. Waits are used for dynamic content\n4. Screenshots are taken for debugging visual issues\n5. Rate limiting is respected for multiple requests"
+          }
+        ]
+      },
+      {
+        "matcher": "tool == \"Bash\" && tool_input.command matches \"screenshot|scrape|fill-form\"",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Before capturing data:\n1. Verify page is fully loaded\n2. Wait for critical elements\n3. Check for popups or overlays\n4. Verify viewport is appropriate"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "tool == \"Bash\" && tool_input.command matches \"agent-browser.*click\"",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "After clicking:\n1. Wait for navigation or content update\n2. Take screenshot to verify result\n3. Check for errors or alerts\n4. Verify expected element appeared"
+          }
+        ]
+      },
+      {
+        "matcher": "tool == \"Bash\" && tool_input.command matches \"agent-browser.*screenshot\"",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Screenshot captured. Consider:\n1. Was the content fully loaded?\n2. Is the viewport correct?\n3. Are there any overlays blocking content?\n4. Should you wait for animations to complete?"
+          }
+        ]
+      }
+    ]
+  }
+}

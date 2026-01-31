@@ -1,0 +1,10 @@
+{
+  "name": "agent-browser",
+  "displayName": "Agent Browser - Browser Automation",
+  "description": "Fast headless browser automation for Claude Code. Built with Rust CLI and Node.js daemon on Playwright.",
+  "version": "1.0.0",
+  "author": "ZenoWangzy",
+  "repository": "https://github.com/ZenoWangzy/agent-browser-claude-plugin",
+  "tags": ["browser", "automation", "testing", "scraping", "playwright"],
+  "icon": "🌐"
+}

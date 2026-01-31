@@ -1,0 +1,29 @@
+{
+  "name": "agent-browser-claude-plugin",
+  "version": "1.0.0",
+  "description": "Fast headless browser automation plugin for Claude Code",
+  "author": "ZenoWangzy <zenowangzy@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZenoWangzy/agent-browser-claude-plugin"
+  },
+  "keywords": [
+    "claude-code",
+    "browser",
+    "automation",
+    "playwright",
+    "scraping",
+    "e2e",
+    "testing",
+    "rust"
+  ],
+  "scripts": {
+    "test": "echo \"Run tests manually by copying to ~/.claude/\"",
+    "install-local": "bash scripts/install.sh"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
