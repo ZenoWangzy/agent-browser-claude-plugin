@@ -197,3 +197,173 @@ agent-browser --profile $SESSION find role option click --name "United States"
 agent-browser --profile $SESSION find label "I accept terms" check
 agent-browser --profile $SESSION find role button click --name "Submit"
 ```
+
+## CSS Selectors vs Semantic Locators
+
+### Why Semantic Locators?
+
+| Aspect | CSS Selectors | Semantic Locators |
+|--------|---------------|-------------------|
+| **Stability** | Fragile - breaks on layout changes | Robust - based on user-visible meaning |
+| **AI Readability** | Requires DOM inspection | Self-documenting |
+| **Maintenance** | High - needs updates on refactors | Low - semantic meaning rarely changes |
+| **Accessibility** | Ignores a11y attributes | Leverages existing a11y markup |
+
+### Migration Examples
+
+| CSS Selector | Semantic Locator |
+|--------------|------------------|
+| `.submit-btn` | `find role button click --name "Submit"` |
+| `#email-input` | `find label "Email" fill "a@b.com"` |
+| `a[href="/about"]` | `find role link click --name "About"` |
+| `:nth-child(2)` | `find role button nth 1 click` |
+| `img.logo` | `find alt "Company Logo" click` |
+
+### When to Use CSS Selectors
+
+CSS selectors are still useful when:
+- Elements lack semantic meaning (generic divs)
+- Performance is critical and semantic locators are slow
+- Working with legacy applications without a11y attributes
+
+In these cases, consider adding `data-testid` attributes:
+```html
+<!-- Instead of -->
+<div class="user-card-123">...</div>
+
+<!-- Use -->
+<div data-testid="user-card">...</div>
+```
+
+Then use: `find testid "user-card"`
+
+## Troubleshooting
+
+### Element Not Found
+
+**Problem**: `find role button click` fails with "element not found"
+
+**Solutions**:
+1. **Check if element exists**:
+   ```bash
+   agent-browser snapshot -i  # List all interactive elements
+   ```
+
+2. **Wait for element**:
+   ```bash
+   agent-browser wait --role button  # Wait for button to appear
+   agent-browser find role button click
+   ```
+
+3. **Try different locator**:
+   ```bash
+   # If role fails, try text
+   agent-browser find text "Submit" click
+   ```
+
+4. **Use less specific filters**:
+   ```bash
+   # Remove --name filter
+   agent-browser find role button click  # Instead of --name "Submit"
+   ```
+
+### Multiple Elements Match
+
+**Problem**: Multiple elements match, wrong one selected
+
+**Solutions**:
+1. **Add `--name` filter**:
+   ```bash
+   agent-browser find role button click --name "Submit"
+   ```
+
+2. **Use `--exact` flag**:
+   ```bash
+   agent-browser find text "Submit" click --exact
+   ```
+
+3. **Use modifiers**:
+   ```bash
+   agent-browser find role button first click
+   agent-browser find role button nth 2 click
+   agent-browser find role button last click
+   ```
+
+4. **Chain locators** (when supported):
+   ```bash
+   agent-browser find role form --name "Login" >> find role button click
+   ```
+
+### Element Found But Not Interactive
+
+**Problem**: Element exists but action fails
+
+**Solutions**:
+1. **Check if element is enabled**:
+   ```bash
+   agent-browser find role button click --enabled
+   ```
+
+2. **Wait for element to become interactive**:
+   ```bash
+   agent-browser wait --fn 'return document.querySelector("[role=\\"button\\"]").disabled === false'
+   ```
+
+3. **Check if element is visible**:
+   ```bash
+   agent-browser find role button click --visible
+   ```
+
+4. **Scroll element into view**:
+   ```bash
+   agent-browser evaluate 'document.querySelector("[role=\\"button\\"]").scrollIntoView()'
+   agent-browser find role button click
+   ```
+
+### Dynamic Content Issues
+
+**Problem**: Content changes after page load
+
+**Solutions**:
+1. **Wait for specific text**:
+   ```bash
+   agent-browser wait --text "Loaded"
+   agent-browser find role button click
+   ```
+
+2. **Wait for URL change**:
+   ```bash
+   agent-browser find role button click
+   agent-browser wait --url "**/dashboard"
+   ```
+
+3. **Use custom wait function**:
+   ```bash
+   agent-browser wait --fn 'return document.querySelector(".content") !== null'
+   ```
+
+### Debug Tips
+
+1. **Use `--headed` mode to see what's happening**:
+   ```bash
+   agent-browser --headed --profile debug open https://example.com
+   ```
+
+2. **Take screenshots at key points**:
+   ```bash
+   agent-browser screenshot before-click.png
+   agent-browser find role button click
+   agent-browser screenshot after-click.png
+   ```
+
+3. **Enable trace logging**:
+   ```bash
+   agent-browser trace enable
+   agent-browser find role button click
+   agent-browser trace show
+   ```
+
+4. **Use snapshot to see element refs**:
+   ```bash
+   agent-browser snapshot -i  # Shows all elements with ref IDs
+   ```
