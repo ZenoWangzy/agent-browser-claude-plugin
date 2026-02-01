@@ -79,22 +79,11 @@ done
 
 **Cookie 持久化**：登录一次后，后续页面自动保持登录状态。
 
-### 3. Pagination Scraping
-
-```bash
-# Scrape all pages
-for page in {1..10}; do
-  agent-browser goto https://example.com/page/$page
-  agent-browser waitFor .item
-  agent-browser getText .item >> data.json
-done
-```
-
 ### 4. Dynamic Content Scraping
 
 ```bash
 # Wait for JavaScript-rendered content
-agent-browser goto https://app.example.com/data
+agent-browser --profile scraper_session goto https://app.example.com/data
 agent-browser waitFor .data-loaded
 agent-browser evaluate '
   Array.from(document.querySelectorAll(".row"))
