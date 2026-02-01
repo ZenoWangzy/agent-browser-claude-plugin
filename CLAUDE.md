@@ -6,6 +6,16 @@
 
 ## 变更记录 (Changelog)
 
+### 2026-02-01
+- ✅ 完成 agent-browser 核心 skill 实现
+- ✅ 添加语义定位器支持（role/label/text）
+- ✅ 实现 Ref 系统用于元素引用
+- ✅ 添加 `--profile` Cookie 持久化
+- ✅ 添加 `--headed` 可视化模式
+- ✅ 创建 find 语义查找命令
+- ✅ 更新现有 skills（web-scraping、form-automation、screenshot-capture、e2e-testing）
+- ✅ 更新 CLAUDE.md 文档
+
 ### 2026-01-31 23:33:55
 - 初始化项目 AI 上下文
 - 完成 Phase A: 全仓清点
@@ -66,6 +76,8 @@ graph TD
     C --> C2["screenshot.md"];
     C --> C3["scrape.md"];
     C --> C4["fill-form.md"];
+    C --> C5["find.md"];
+    D --> D0["agent-browser/"];
     D --> D1["web-scraping/"];
     D --> D2["form-automation/"];
     D --> D3["screenshot-capture/"];
@@ -78,6 +90,7 @@ graph TD
     style B fill:#bbf,stroke:#333,stroke-width:2px
     style C fill:#bfb,stroke:#333,stroke-width:2px
     style D fill:#fbb,stroke:#333,stroke-width:2px
+    style D0 fill:#ff9,stroke:#333,stroke-width:3px
 ```
 
 ---
@@ -91,6 +104,8 @@ graph TD
 | screenshot | `commands/` | 截图捕获命令 | Command |
 | scrape | `commands/` | 数据爬取命令 | Command |
 | fill-form | `commands/` | 表单自动填充命令 | Command |
+| find | `commands/` | 语义查找命令 | Command |
+| agent-browser | `skills/` | 浏览器自动化核心技能 | Skill |
 | web-scraping | `skills/` | 网页爬取工作流 | Skill |
 | form-automation | `skills/` | 表单自动化工作流 | Skill |
 | screenshot-capture | `skills/` | 截图捕获工作流 | Skill |
@@ -222,6 +237,66 @@ agent-browser waitForTimeout <ms>
 ### 等待策略
 - ✅ `agent-browser waitFor .load-complete` 然后操作
 - ❌ `sleep 5` 然后操作（可能未就绪）
+
+### 可视化操作（Visual Mode）
+
+使用 `--headed` 模式让浏览器可见，便于调试和验证：
+
+```bash
+# 调试时推荐：实时查看操作过程
+agent-browser --headed goto https://example.com
+agent-browser click .button
+```
+
+**适用场景**：
+- 调试复杂的动态网站
+- 验证选择器是否正确
+- 观察异步加载过程
+- 演示和录制操作
+
+### Cookie 持久化（Session Persistence）
+
+使用 `--profile` 自动保存 cookies 和会话状态：
+
+```bash
+# 第一次：登录并保存状态
+agent-browser --profile my_session goto https://example.com/login
+agent-browser find label="Email" fill "user@example.com"
+agent-browser find label="Password" fill "password"
+agent-browser click button[type="submit"]
+
+# 后续操作：无需重新登录
+agent-browser --profile my_session goto https://example.com/dashboard
+agent-browser --profile my_session goto https://example.com/settings
+```
+
+**Profile 优势**：
+- 登录一次，多个任务共享状态
+- 避免重复登录浪费时间
+- 不同任务使用不同 profile 隔离状态
+- 支持 93% 的上下文窗口节省
+
+### 语义定位器（Semantic Locators）
+
+使用语义化元素定位，提高脚本稳定性：
+
+```bash
+# 语义定位器（推荐）
+agent-browser find role="button" name="Submit" click
+agent-browser find label="Email" fill "user@example.com"
+agent-browser find text="Continue" click
+
+# vs 传统 CSS 选择器（易受重构影响）
+agent-browser click .submit-btn
+agent-browser fill #email-field "user@example.com"
+agent-browser click a.continue-link
+```
+
+**语义定位器类型**：
+- `role="button"` - ARIA 角色
+- `label="Email"` - 表单标签
+- `text="Continue"` - 文本内容
+- `name="Submit"` - 可访问名称
 
 ---
 

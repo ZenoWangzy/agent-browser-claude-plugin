@@ -9,8 +9,11 @@
     "url": "https://github.com/ZenoWangzy/agent-browser-claude-plugin"
   },
   "components": {
-    "agents": ["agents/browser-automation.md"],
+    "agents": [
+      "agents/browser-automation.md"
+    ],
     "skills": [
+      "skills/agent-browser",
       "skills/web-scraping",
       "skills/form-automation",
       "skills/screenshot-capture",

@@ -21,20 +21,63 @@ Use this skill when you need to:
 ### 1. Simple Text Extraction
 
 ```bash
-# Navigate and extract
-agent-browser goto https://example.com
+# 使用 profile 保持会话隔离（推荐）
+agent-browser --profile scraper_session goto https://example.com
 agent-browser waitFor .content
 agent-browser getText .content
 ```
 
+**会话隔离说明**：使用 `--profile` 可以：
+- 自动保存 cookies，避免重复登录
+- 隔离不同爬取任务的状态
+- 断点续传时保持登录状态
+
+```bash
+# 使用可视化模式调试爬虫
+agent-browser --profile scraper_session --headed goto https://example.com
+agent-browser waitFor .content
+agent-browser getText .content
+```
+
+**可视化模式优势**：`--headed` 让浏览器可见，便于：
+- 实时查看爬虫执行过程
+- 验证选择器是否正确
+- 调试动态加载问题
+
 ### 2. Multi-Element Scraping
 
 ```bash
-# Scrape all items in a list
-agent-browser goto https://shop.com/products
-agent-browser waitFor .product-item
-agent-browser getText .product-item
+# 使用语义定位器（推荐）
+agent-browser --profile scraper_session goto https://shop.com/products
+agent-browser waitFor text="Products"
+agent-browser find role="link" name="Product" click
+agent-browser waitFor text="Price"
+agent-browser evaluate '
+  Array.from(document.querySelectorAll("[role=\"listitem\"]"))
+    .map(item => ({
+      name: item.querySelector("[role=\"heading\"]")?.textContent,
+      price: item.querySelector("[role=\"text\"]")?.textContent
+    }))
+'
 ```
+
+**语义定位器优势**：
+- `role="link" name="Product"` - 比 `.product-link` 更稳定
+- `text="Price"` - 比嵌套 CSS 选择器更易维护
+- `label="Email"` - 自动关联表单标签
+
+### 3. Pagination Scraping（会话持久化）
+
+```bash
+# 使用 profile 自动保存 cookies（避免重复登录）
+for page in {1..10}; do
+  agent-browser --profile scraper_session goto https://example.com/page/$page
+  agent-browser waitFor .item
+  agent-browser getText .item >> data.json
+done
+```
+
+**Cookie 持久化**：登录一次后，后续页面自动保持登录状态。
 
 ### 3. Pagination Scraping
 

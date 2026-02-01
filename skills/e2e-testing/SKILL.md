@@ -20,17 +20,18 @@ Use this skill when you need to:
 
 ## Core Workflows
 
-### Basic User Flow Test
+### Basic User Flow Test（可视化调试）
 
 ```bash
-# Test signup flow
-agent-browser goto https://example.com/signup
+# 使用 --headed 可视化测试流程（调试时推荐）
+agent-browser --profile e2e_signup --headed goto https://example.com/signup
 agent-browser waitFor #signup-form
 
-agent-browser fill #username "testuser"
-agent-browser fill #email "test@example.com"
-agent-browser fill #password "TestPass123!"
-agent-browser click button[type="submit"]
+# 使用语义定位器
+agent-browser find label="Username" fill "testuser"
+agent-browser find label="Email" fill "test@example.com"
+agent-browser find label="Password" fill "TestPass123!"
+agent-browser find role="button" name="Sign Up" click
 
 agent-browser waitFor .welcome-message
 agent-browser getText .welcome-message
@@ -45,15 +46,21 @@ agent-browser evaluate '
 '
 ```
 
-### Authentication Test
+**E2E 测试最佳实践**：
+- 调试时使用 `--headed` 查看测试执行
+- 使用语义定位器提高测试稳定性
+- 使用 `--profile` 管理测试状态
+- CI 环境去掉 `--headed` 使用无头模式
+
+### Authentication Test（会话管理）
 
 ```bash
-# Test login flow
-agent-browser goto https://example.com/login
+# 使用 profile 管理 E2E 测试的登录状态
+agent-browser --profile e2e_test goto https://example.com/login
 agent-browser waitFor #login-form
 
-agent-browser fill #email "user@example.com"
-agent-browser fill #password "password123"
+agent-browser find label="Email" fill "user@example.com"
+agent-browser find label="Password" fill "password123"
 agent-browser click button[type="submit"]
 
 # Should redirect to dashboard
@@ -64,7 +71,19 @@ agent-browser evaluate '
     url: window.location.href
   };
 '
+
+# 登录状态已保存，可以继续测试其他页面
+agent-browser --profile e2e_test goto https://example.com/profile
+agent-browser waitFor .user-profile
+
+agent-browser --profile e2e_test goto https://example.com/settings
+agent-browser waitFor .settings-page
 ```
+
+**E2E 测试的 Profile 策略**：
+- 每个测试套件使用独立 profile（如 `e2e_auth`、`e2e_checkout`）
+- 登录一次，多个测试步骤共享状态
+- 测试间隔离：不同套件使用不同 profile
 
 ### Form Validation Test
 
@@ -259,17 +278,22 @@ tests/
 │       └── endpoints.test.sh
 ```
 
-### Test Template
+### Test Template（完整示例）
+
 ```bash
 #!/bin/bash
 # test-name.test.sh
 
+PROFILE="e2e_${TEST_NAME}"
+
 setup() {
-  agent-browser goto https://example.com
+  # 使用 profile 和可视化模式
+  agent-browser --profile "$PROFILE" --headed goto https://example.com
 }
 
 test_something() {
-  agent-browser click .button
+  # 使用语义定位器
+  agent-browser find role="button" name="Submit" click
   agent-browser waitFor .result
 
   local result=$(agent-browser evaluate '
@@ -285,12 +309,21 @@ test_something() {
 }
 
 teardown() {
+  # 关闭浏览器并清理 profile
   agent-browser close
+  # 可选：清理 profile 数据
+  # rm -rf ~/.agent-browser/profiles/$PROFILE
 }
 
 setup
 test_something
 teardown
+```
+
+**CI 环境模板**（无头模式）：
+```bash
+# 在 CI 中去掉 --headed
+agent-browser --profile "$PROFILE" goto https://example.com
 ```
 
 ## Visual Regression Testing

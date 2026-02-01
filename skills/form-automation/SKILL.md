@@ -18,16 +18,38 @@ Use this skill when you need to:
 
 ## Core Workflows
 
-### Simple Form Fill
+### Simple Form Fill（可视化模式）
 
 ```bash
-agent-browser goto https://example.com/contact
+# 使用 --headed 可视化填写过程（推荐用于调试）
+agent-browser --profile form_fill --headed goto https://example.com/contact
 agent-browser waitFor #name
 agent-browser fill #name "John Doe"
 agent-browser fill #email "john@example.com"
 agent-browser fill #message "Hello, world!"
 agent-browser click button[type="submit"]
 ```
+
+**可视化填写优势**：
+- 实时看到填写过程，验证字段是否正确
+- 检测动态字段变化（如根据选择显示的字段）
+- 验证提交后的页面跳转
+
+### Semantic Form Fill（语义定位器）
+
+```bash
+# 使用语义定位器（更稳定，不受 CSS 类名变化影响）
+agent-browser --profile form_fill goto https://example.com/contact
+agent-browser find label="Email" fill "john@example.com"
+agent-browser find label="Name" fill "John Doe"
+agent-browser find label="Message" fill "Hello, world!"
+agent-browser find role="button" name="Send" click
+```
+
+**语义定位器优势**：
+- `label="Email"` - 自动查找关联的 `<label>` 元素
+- `role="button" name="Send"` - 比 `.submit-btn` 更语义化
+- 不受 CSS 框架重构影响
 
 ### Smart Field Detection
 
@@ -147,18 +169,25 @@ agent-browser fill #field2 "value2"
 
 ## Common Patterns
 
-### Registration Form
-```bash
-agent-browser goto https://example.com/signup
+### Registration Form（会话持久化）
 
-agent-browser fill #username "newuser"
-agent-browser fill #email "user@example.com"
-agent-browser fill #password "SecurePass123!"
-agent-browser fill #confirmPassword "SecurePass123!"
-agent-browser check #agreeTerms
+```bash
+# 使用 --profile 保持登录状态
+agent-browser --profile registration goto https://example.com/signup
+
+agent-browser find label="Username" fill "newuser"
+agent-browser find label="Email" fill "user@example.com"
+agent-browser find label="Password" fill "SecurePass123!"
+agent-browser find label="Confirm Password" fill "SecurePass123!"
+agent-browser find label="I agree to terms" check
 
 agent-browser click button[type="submit"]
 agent-browser waitFor .welcome-message
+
+# 登录状态已自动保存到 registration profile
+# 后续操作无需重新登录
+agent-browser --profile registration goto https://example.com/dashboard
+agent-browser waitFor .user-profile
 ```
 
 ### Login Form

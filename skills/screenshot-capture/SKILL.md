@@ -22,9 +22,30 @@ Use this skill when you need to:
 ### Full Page Screenshot
 
 ```bash
-agent-browser goto https://example.com
+# 使用 --profile 保持登录状态后截图
+agent-browser --profile screenshot_session goto https://example.com
 agent-browser waitFor body
 agent-browser screenshot --full fullpage.png
+```
+
+**Profile 使用场景**：
+- 登录后截取需要认证的页面
+- 多个截图任务共享 cookies
+- 避免重复登录浪费时间
+
+### After Login Screenshot
+
+```bash
+# 登录并保存状态
+agent-browser --profile screenshot_session --headed goto https://example.com/login
+agent-browser find label="Email" fill "user@example.com"
+agent-browser find label="Password" fill "password123"
+agent-browser click button[type="submit"]
+agent-browser waitFor .dashboard
+
+# 登录状态已保存，后续截图无需重新登录
+agent-browser --profile screenshot_session goto https://example.com/protected-page
+agent-browser screenshot --full protected.png
 ```
 
 ### Element Screenshot

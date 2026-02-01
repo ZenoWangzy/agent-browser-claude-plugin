@@ -2,6 +2,52 @@
 
 Always-follow guidelines for browser automation tasks with agent-browser.
 
+## 0. Profile Isolation (CRITICAL)
+
+ALWAYS use `--profile` for session isolation:
+
+```bash
+# GOOD - Isolated session with cookie persistence
+agent-browser --profile myproject --headed open https://example.com
+
+# BAD - Shared state, no cookie persistence
+agent-browser open https://example.com
+```
+
+**WHY**: Profiles provide session isolation and automatic cookie saving.
+
+## 0.1. Visual Mode (RECOMMENDED)
+
+ALWAYS use `--headed` when user is monitoring:
+
+```bash
+# GOOD - User can see browser actions
+agent-browser --profile $S --headed open https://example.com
+
+# ACCEPTABLE - Headless for batch operations
+agent-browser --profile $S open https://example.com
+```
+
+**WHY**: Users see exactly what AI is doing, building trust and aiding debugging.
+
+## 0.2. Semantic Locators (PREFERRED)
+
+PREFER semantic locators over CSS selectors:
+
+```bash
+# GOOD - Semantic, stable
+agent-browser --profile $S find role button click --name "Submit"
+agent-browser --profile $S find label "Email" fill "user@test.com"
+
+# ACCEPTABLE - When semantic not possible
+agent-browser --profile $S click ".submit-button"
+
+# BAD - Fragile selectors
+agent-browser --profile $S click "div > div > button"
+```
+
+**WHY**: Semantic locators are more stable and AI-friendly.
+
 ## 1. Selector Stability (CRITICAL)
 
 ALWAYS use stable, semantic selectors:

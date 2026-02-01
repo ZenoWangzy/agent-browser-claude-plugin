@@ -91,11 +91,40 @@ agent-browser tab <index>
 
 ## Best Practices
 
-1. **Always wait for elements** before interacting with them
-2. **Use specific selectors** (CSS classes, IDs) over generic ones
-3. **Handle errors gracefully** - pages may load slowly or elements may not exist
-4. **Take screenshots** for debugging visual issues
-5. **Clean up resources** - close browser when done
+1. **Always use --profile** for session isolation and cookie persistence
+2. **Use --headed** to show browser window (users see AI actions)
+3. **Always wait for elements** before interacting with them
+4. **Use semantic locators** (role/text/label) over CSS selectors
+5. **Snapshot before ref usage** - refs invalidate on page changes
+6. **Take screenshots** for debugging visual issues
+7. **Handle errors gracefully** - re-snapshot if refs fail
+
+## Semantic Locators (Recommended)
+
+Use AI-friendly locators instead of CSS selectors:
+
+```bash
+# By role
+agent-browser --profile $S find role button click --name "Submit"
+
+# By label (for forms)
+agent-browser --profile $S find label "Email" fill "user@test.com"
+
+# By visible text
+agent-browser --profile $S find text "More info" click
+```
+
+## Ref System
+
+```bash
+# Take snapshot to get refs
+agent-browser --profile $S snapshot -i
+
+# Use refs (@e1, @e2, etc.)
+agent-browser --profile $S click @e5
+agent-browser --profile $S fill @e6 "text"
+```
+
 
 ## Example Workflows
 
