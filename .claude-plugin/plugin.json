@@ -21,6 +21,7 @@
     ],
     "commands": [
       "commands/browse.md",
+      "commands/find.md",
       "commands/screenshot.md",
       "commands/scrape.md",
       "commands/fill-form.md"
